@@ -1,0 +1,13 @@
+# Repository guidance
+
+BVW Debate Financial Consolidation uses FastAPI and Supabase Auth/Postgres/Storage. Read README.md for setup and ARCHITECTURE.md for boundaries. Keep documentation in README.md, AGENTS.md, CLAUDE.md, and ARCHITECTURE.md.
+
+- Frontend provides Home, Analysis, and source review. Keep finance routes in the dedicated finance bridge. Do not widen the old private bridge allowlist.
+- Never restore bookstore/Neon/SQLite models, local authentication, or demo bootstrap/seeding. Runtime persistence uses Supabase Data API/Storage with each user's verified Auth JWT.
+- Inspect the confirmed Supabase project before schema changes. Check in every SQL migration and apply through Supabase MCP. Never reset deployed data or run migrations on requests/builds.
+- Enable RLS on exposed tables. Authorize group membership through finance_members; users cannot grant their own membership. Keep runtime service-role/secret keys out of application code and the browser.
+- Money uses integer cents. Validate source fields and financial class/category pairs. AI extraction audit records stay drafts. Browser source uploads require confirmation against the reviewed head. Existing automatic API uploads still apply complete validated batches. Unknown fields stay null and block the entire batch from workbook application. Never invent missing transactions, balancing entries, or cross-document reconciliation.
+- Keep sources and full workbook objects in separate private Storage buckets. Preserve bounded uploads, checksums, atomic/idempotent extraction, append-only workbook revisions, compare-and-swap current pointers, and no shared local output state. Restore must create a new head with historical contents; manual replacement must require the downloaded version UUID. Never rebuild current from audit rows and discard offline edits. Root prototype files remain unchanged.
+- Follow four-space Python indentation, typed/bounded Pydantic models, and safe error messages. Keep request log isolation and safe field allowlists; never log credentials, financial bodies, raw provider errors, or signed URLs.
+- Update backend/uv.lock with dependencies. Run `cd backend && uv run --extra dev --locked pytest -q`. Run backend/tests/verify_supabase.sql and backend/tests/verify_rolling.sql through MCP for persistence changes; fixtures must roll back. The rolling SQL test uses synthetic Storage metadata, not real file bytes. Clearly distinguish simulated provider tests from live Storage/Groq checks.
+- Ignore env files, virtualenvs, generated caches, and private artifacts. Preserve unrelated user changes. Do not add real credentials or first-user promotion.

@@ -1,0 +1,20 @@
+.DS_Store
+node_modules/
+.next/
+.vercel/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env*
+!/.env.example
+*.db
+*.db-*
+*.tsbuildinfo
+test-results/
+/frontend/next-env.d.ts
+/misc/
+
+# Next.js may generate service-local agent guidance; root docs are authoritative.
+/frontend/AGENTS.md
+/frontend/CLAUDE.md
